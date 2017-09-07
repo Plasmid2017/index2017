@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style>
+			*{
+				margin:0;
+				padding:0;
+			}
+			html,body{
+				width:100%;
+			}
+			.header{
+				width:100%;
+				height:50px;
+				background-color:orange;
+			}
+			.headerList{
+				width:800px;
+				height:50px;
+				margin:0 auto;
+			}
+    li {
+    	width:50px;
+    	text-align:center;
+    	line-height:30px;
+      float: left;
+      list-style: none;
+      margin-right: 10px;
+      padding:10px;
+      color: white;
+    }
+    a {
+      text-decoration: none;
+      color: white;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+    .content{
+    	width:100%;
+    }
+    .hot{
+    	width:100px;
+    	height:40px;
+    	font-size:20px;
+    	color:orangered;
+    	margin:28px auto;
+    }
+    .product{
+    	float:left;
+    	width:320px;
+    	height:300px;
+    	margin:10px;
+    }
+    .pic{
+    	width:320px;
+    	height:260px;
+    }
+    .commodity{
+    	width:100%;
+    }
+    .list{
+    	margin:0 auto;
+    	height:1500px;
+    	width:1080px;
+    	/*background:blue;*/
+    }
+    p{
+    	color:#000;
+    }
+  </style>
+	</head>
+	<body>
+		<div class="header" id=""header"">
+			<ul class="headerList" id="headerList"></ul>
+		</div>
+		<div class="content" id="content">
+			<h1 class="hot">热门商品</h1>
+		</div>
+		<div class="commodity" id="commodity">
+			<ul class="list" id='list'></ul>
+		</div>
+		<script type="text/javascript" src="myajax.js"></script>
+		<script>
+			var oHeaderList = document.querySelector('#headerList');
+			myajax.get('http://h6.duchengjiu.top/shop/api_cat.php', {}, function(error, responseText){
+				var json = JSON.parse(responseText);
+				var data = json.data;
+				for (var i = 0; i < data.length; i++) {
+					var obj = data[i];
+					oHeaderList.innerHTML += `
+					<li>
+					<a href="0907商品分类中的商品列表.html?cat_id=${data[i].cat_id}">${data[i].cat_name}</a>
+					</li>`;
+				}
+			});
+		</script>
+		<script>
+			var oList = document.querySelector('#list');
+			myajax.get('http://h6.duchengjiu.top/shop/api_goods.php', {}, function(error, responseText){
+				var json = JSON.parse(responseText);
+				var data = json.data;
+				for (var i = 0; i < data.length; i++) {
+					var obj = data[i];
+					var oLi = document.createElement('li');
+					var oDiv1 = document.createElement('div');
+					oLi.className = "product";
+					oDiv1.style.background = 'url(' + obj.goods_thumb + ')';
+					oDiv1.style.backgroundSize = '300px' + ' ' + '260px';
+					oDiv1.className = 'pic';
+					oList.appendChild(oLi);
+					oLi.appendChild(oDiv1);
+					var oP1 = document.createElement('p');
+					oP1.innerText = obj.goods_name;
+					oLi.appendChild(oP1);
+				}
+			});
+		</script>
+	</body>
+</html>
